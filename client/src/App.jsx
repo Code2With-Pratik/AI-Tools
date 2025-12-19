@@ -12,15 +12,16 @@ import SignUpPage from "./app/auth/SignUp";
 export default function App() {
   return (
     <Routes>
-      {/* PUBLIC ROUTES */}
+      {/* PUBLIC */}
       <Route element={<HomeLayout />}>
         <Route path="/" element={<Home />} />
       </Route>
 
-      <Route path="/sign-in" element={<SignInPage />} />
-      <Route path="/sign-up" element={<SignUpPage />} />
+      {/* AUTH ROUTES (FIXED) */}
+      <Route path="/sign-in/*" element={<SignInPage />} />
+      <Route path="/sign-up/*" element={<SignUpPage />} />
 
-      {/* PROTECTED ROUTES */}
+      {/* PROTECTED DASHBOARD */}
       <Route
         element={
           <SignedIn>

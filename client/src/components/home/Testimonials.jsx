@@ -31,8 +31,8 @@ export default function Testimonials() {
               className="bg-white p-6 rounded-xl border shadow-sm"
             >
               <p className="text-gray-600 mb-4">“{item.text}”</p>
-              <h4 className="font-semibold">{item.name}</h4>
-              <span className="text-sm text-gray-500">{item.role}</span>
+              <h4 className="text-red-600 font-semibold">{item.name}</h4>
+              <span className="text-sm text-gray-800">{item.role}</span>
             </div>
           ))}
         </div>

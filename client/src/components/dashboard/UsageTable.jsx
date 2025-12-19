@@ -1,30 +1,24 @@
-const rows = [
-  { tool: "Write Article", usage: "340 requests" },
-  { tool: "Generate Image", usage: "120 images" },
-  { tool: "Remove Background", usage: "80 images" },
-];
+import { useCredits } from "@/context/CreditContext";
 
 export default function UsageTable() {
-  return (
-    <div className="bg-gray-800 p-6 rounded-xl border col-span-2">
-      <h3 className="font-semibold mb-4">Tool Usage</h3>
+  const { usage } = useCredits();
 
-      <table className="w-full text-sm">
-        <thead className="text-gray-500 border-b">
-          <tr>
-            <th className="text-left py-2">Tool</th>
-            <th className="text-right py-2">Usage</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.tool} className="border-b last:border-0">
-              <td className="py-3">{row.tool}</td>
-              <td className="py-3 text-right">{row.usage}</td>
-            </tr>
+  return (
+    <div className="bg-white p-6 rounded-xl border col-span-2">
+      <h3 className="font-semibold mb-4">Usage</h3>
+
+      {Object.keys(usage).length === 0 ? (
+        <p className="text-sm text-gray-500">No usage yet</p>
+      ) : (
+        <ul className="space-y-2 text-sm">
+          {Object.entries(usage).map(([tool, amount]) => (
+            <li key={tool} className="flex justify-between">
+              <span>{tool}</span>
+              <span>{amount} credits</span>
+            </li>
           ))}
-        </tbody>
-      </table>
+        </ul>
+      )}
     </div>
   );
 }

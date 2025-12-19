@@ -9,6 +9,12 @@ import Dashboard from "./app/dashboard/Dashboard";
 import SignInPage from "./app/auth/SignIn";
 import SignUpPage from "./app/auth/SignUp";
 
+// dashboard tool pages
+import WriteArticle from "./app/dashboard/tools/WriteArticle";
+import BlogTitles from "./app/dashboard/tools/BlogTitles";
+import GenerateImage from "./app/dashboard/tools/GenerateImage";
+import RemoveBg from "./app/dashboard/tools/RemoveBg";
+
 export default function App() {
   return (
     <Routes>
@@ -17,11 +23,11 @@ export default function App() {
         <Route path="/" element={<Home />} />
       </Route>
 
-      {/* AUTH ROUTES (FIXED) */}
+      {/* AUTH */}
       <Route path="/sign-in/*" element={<SignInPage />} />
       <Route path="/sign-up/*" element={<SignUpPage />} />
 
-      {/* PROTECTED DASHBOARD */}
+      {/* DASHBOARD (PROTECTED GROUP) */}
       <Route
         element={
           <SignedIn>
@@ -30,11 +36,15 @@ export default function App() {
         }
       >
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/write-article" element={<WriteArticle />} />
+        <Route path="/dashboard/blog-titles" element={<BlogTitles />} />
+        <Route path="/dashboard/generate-image" element={<GenerateImage />} />
+        <Route path="/dashboard/remove-bg" element={<RemoveBg />} />
       </Route>
 
-      {/* REDIRECT UNAUTH USERS */}
+      {/* FALLBACK: if signed out, redirect any /dashboard/* to sign-in */}
       <Route
-        path="/dashboard"
+        path="/dashboard/*"
         element={
           <SignedOut>
             <RedirectToSignIn />

@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 
+import UserSync from "./components/UserSync";
+
 import HomeLayout from "./layouts/HomeLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 
@@ -17,40 +19,45 @@ import RemoveBg from "./app/dashboard/tools/RemoveBg";
 
 export default function App() {
   return (
-    <Routes>
-      {/* PUBLIC */}
-      <Route element={<HomeLayout />}>
-        <Route path="/" element={<Home />} />
-      </Route>
+    <>
+      {/* 🔑 SYNC CLERK USER → DATABASE */}
+      <UserSync />
 
-      {/* AUTH */}
-      <Route path="/sign-in/*" element={<SignInPage />} />
-      <Route path="/sign-up/*" element={<SignUpPage />} />
+      <Routes>
+        {/* PUBLIC */}
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
 
-      {/* DASHBOARD (PROTECTED GROUP) */}
-      <Route
-        element={
-          <SignedIn>
-            <DashboardLayout />
-          </SignedIn>
-        }
-      >
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/write-article" element={<WriteArticle />} />
-        <Route path="/dashboard/blog-titles" element={<BlogTitles />} />
-        <Route path="/dashboard/generate-image" element={<GenerateImage />} />
-        <Route path="/dashboard/remove-bg" element={<RemoveBg />} />
-      </Route>
+        {/* AUTH */}
+        <Route path="/sign-in/*" element={<SignInPage />} />
+        <Route path="/sign-up/*" element={<SignUpPage />} />
 
-      {/* FALLBACK: if signed out, redirect any /dashboard/* to sign-in */}
-      <Route
-        path="/dashboard/*"
-        element={
-          <SignedOut>
-            <RedirectToSignIn />
-          </SignedOut>
-        }
-      />
-    </Routes>
+        {/* DASHBOARD (PROTECTED) */}
+        <Route
+          element={
+            <SignedIn>
+              <DashboardLayout />
+            </SignedIn>
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/write-article" element={<WriteArticle />} />
+          <Route path="/dashboard/blog-titles" element={<BlogTitles />} />
+          <Route path="/dashboard/generate-image" element={<GenerateImage />} />
+          <Route path="/dashboard/remove-bg" element={<RemoveBg />} />
+        </Route>
+
+        {/* REDIRECT UNAUTHENTICATED USERS */}
+        <Route
+          path="/dashboard/*"
+          element={
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          }
+        />
+      </Routes>
+    </>
   );
 }

@@ -1,43 +1,45 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 
 import HomeLayout from "./layouts/HomeLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
 
 import Home from "./app/home/Home";
 import Dashboard from "./app/dashboard/Dashboard";
+import SignInPage from "./app/auth/SignIn";
+import SignUpPage from "./app/auth/SignUp";
 
-import WriteArticle from "./app/dashboard/tools/WriteArticle";
-import BlogTitles from "./app/dashboard/tools/BlogTitles";
-import GenerateImage from "./app/dashboard/tools/GenerateImage";
-import RemoveBg from "./app/dashboard/tools/RemoveBg";
-
-import SignIn from "./app/auth/SignIn";
-import SignUp from "./app/auth/SignUp";
-
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* HOME */}
-        <Route element={<HomeLayout />}>
-          <Route path="/" element={<Home />} />
-        </Route>
+    <Routes>
+      {/* PUBLIC ROUTES */}
+      <Route element={<HomeLayout />}>
+        <Route path="/" element={<Home />} />
+      </Route>
 
-        {/* AUTH */}
-        <Route path="/sign-in/*" element={<SignIn />} />
-        <Route path="/sign-up/*" element={<SignUp />} />
+      <Route path="/sign-in" element={<SignInPage />} />
+      <Route path="/sign-up" element={<SignUpPage />} />
 
-        {/* DASHBOARD */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/write-article" element={<WriteArticle />} />
-          <Route path="/dashboard/blog-titles" element={<BlogTitles />} />
-          <Route path="/dashboard/generate-image" element={<GenerateImage />} />
-          <Route path="/dashboard/remove-bg" element={<RemoveBg />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      {/* PROTECTED ROUTES */}
+      <Route
+        element={
+          <SignedIn>
+            <DashboardLayout />
+          </SignedIn>
+        }
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+
+      {/* REDIRECT UNAUTH USERS */}
+      <Route
+        path="/dashboard"
+        element={
+          <SignedOut>
+            <RedirectToSignIn />
+          </SignedOut>
+        }
+      />
+    </Routes>
   );
 }
-
-export default App;
